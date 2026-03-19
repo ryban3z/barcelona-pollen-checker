@@ -1,0 +1,62 @@
+name: Daily Barcelona Pollen Check
+
+on:
+  schedule:
+    # Runs at 7:00 AM UTC every day (9:00 AM Barcelona time in summer, 8:00 AM in winter)
+    - cron: "0 7 * * *"
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  pollen-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run pollen checker
+        run: python pollen_checker.py
+
+      # --- Optional: uncomment ONE of the notification methods below ---
+
+      # OPTION 1: Create a GitHub Issue with the daily report
+      # - name: Create GitHub Issue with pollen report
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     REPORT=$(python pollen_checker.py 2>&1)
+      #     DATE=$(date +%Y-%m-%d)
+      #     gh issue create \
+      #       --title "Pollen Report - $DATE" \
+      #       --body "\`\`\`
+      #     $REPORT
+      #     \`\`\`" \
+      #       --label "pollen-report"
+
+      # OPTION 2: Send email via a third-party action
+      # Requires setting repository secrets: MAIL_USERNAME, MAIL_PASSWORD
+      # - name: Send email notification
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: smtp.gmail.com
+      #     server_port: 465
+      #     username: ${{ secrets.MAIL_USERNAME }}
+      #     password: ${{ secrets.MAIL_PASSWORD }}
+      #     subject: "Barcelona Pollen Report - ${{ github.event.repository.name }}"
+      #     to: your-email@example.com
+      #     from: Pollen Bot
+      #     body: ${{ steps.pollen.outputs.report }}
+
+      # OPTION 3: Send to Slack via webhook
+      # Requires setting repository secret: SLACK_WEBHOOK_URL
+      # - name: Send Slack notification
+      #   run: |
+      #     REPORT=$(python pollen_checker.py 2>&1)
+      #     curl -X POST -H 'Content-type: application/json' \
+      #       --data "{\"text\": \"$REPORT\"}" \
+      #       ${{ secrets.SLACK_WEBHOOK_URL }}
