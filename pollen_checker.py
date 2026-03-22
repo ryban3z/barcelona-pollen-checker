@@ -15,21 +15,29 @@ from urllib.request import urlopen, Request
 
 API_URL = "https://aerobiologia.cat/api/v0/forecast/barcelona/en/xml"
 
-# Pollen risk levels — the API uses these categorical values
-RISK_LEVELS = {
-    "none": 0,
-    "low": 1,
-    "moderate": 2,
-    "high": 3,
-    "very high": 4,
+# Pollen risk levels — the API uses numeric values 0-4
+RISK_LABELS = {
+    0: "none",
+    1: "low",
+    2: "moderate",
+    3: "high",
+    4: "very high",
 }
 
 RISK_EMOJI = {
-    "none": "---",
-    "low": "[!]",
-    "moderate": "[!!]",
-    "high": "[!!!]",
-    "very high": "[!!!!]",
+    0: "---",
+    1: "[!]",
+    2: "[!!]",
+    3: "[!!!]",
+    4: "[!!!!]",
+}
+
+# Forecast trend codes from the API
+FORECAST_LABELS = {
+    "A": "RISING",
+    "=": "stable",
+    "D": "falling",
+    "!": "EXCEPTIONAL",
 }
 
 
@@ -43,13 +51,12 @@ def fetch_forecast_xml() -> str:
 def parse_forecast(xml_text: str) -> dict:
     """Parse the PIA XML forecast into a structured dict.
 
-    The XML structure (based on API docs) contains:
-    - Taxon names present in the forecast
-    - Forecast table keys (risk levels)
-    - Station information
-    - Forecast date range (start, end)
-    - Current level values
-    - Forecast values
+    The API XML structure:
+    - <taxons><pollens>/<spores> maps codes (e.g. URTI) to names
+    - <report><station><name> has the station name
+    - <report><date><start>/<end> has the forecast period
+    - <report><current><pollens>/<spores> has numeric risk levels (0-4)
+    - <report><forecast><pollens>/<spores> has trend codes (A/=/D/!)
     """
     root = ET.fromstring(xml_text)
 
@@ -60,76 +67,54 @@ def parse_forecast(xml_text: str) -> dict:
         "taxons": [],
     }
 
-    # Try common XML structures the PIA API might use
-    # Extract station info
-    station_el = root.find(".//station") or root.find(".//punt")
-    if station_el is not None:
-        result["station"] = station_el.text or station_el.get("name", "Barcelona")
+    # Extract station name
+    station_name = root.find(".//report/station/name")
+    if station_name is not None and station_name.text:
+        result["station"] = station_name.text.strip()
 
     # Extract date range
-    for tag in ["date_start", "start", "data_inici", "inici"]:
-        el = root.find(f".//{tag}")
-        if el is not None and el.text:
-            result["date_start"] = el.text.strip()
-            break
+    date_start = root.find(".//report/date/start")
+    if date_start is not None and date_start.text:
+        result["date_start"] = date_start.text.strip()
+    date_end = root.find(".//report/date/end")
+    if date_end is not None and date_end.text:
+        result["date_end"] = date_end.text.strip()
 
-    for tag in ["date_end", "end", "data_fi", "fi"]:
-        el = root.find(f".//{tag}")
-        if el is not None and el.text:
-            result["date_end"] = el.text.strip()
-            break
+    # Build taxon code -> name mapping from the <taxons> section
+    name_map = {}
+    for section in ["pollens", "spores"]:
+        taxon_section = root.find(f".//taxons/{section}")
+        if taxon_section is not None:
+            for el in taxon_section:
+                code = el.tag
+                # Prefer English name from 'en' attribute, fall back to element text
+                name = el.get("en") or el.text or code
+                name_map[code] = name
 
-    # Extract taxon/pollen data
-    # Look for elements that represent individual pollen types
-    for tag in ["taxon", "taxo", "polen", "pollen"]:
-        taxons = root.findall(f".//{tag}")
-        if taxons:
-            for t in taxons:
-                name = (
-                    t.get("name")
-                    or t.get("nom")
-                    or (t.find("name") and t.find("name").text)
-                    or (t.find("nom") and t.find("nom").text)
-                    or "Unknown"
-                )
-                level = (
-                    t.get("level")
-                    or t.get("nivell")
-                    or (t.find("level") and t.find("level").text)
-                    or (t.find("nivell") and t.find("nivell").text)
-                    or (t.find("current") and t.find("current").text)
-                    or (t.find("actual") and t.find("actual").text)
-                    or "none"
-                )
-                forecast = (
-                    t.get("forecast")
-                    or t.get("previsio")
-                    or (t.find("forecast") and t.find("forecast").text)
-                    or (t.find("previsio") and t.find("previsio").text)
-                    or level
-                )
-                result["taxons"].append(
-                    {
-                        "name": name.strip(),
-                        "current_level": level.strip().lower(),
-                        "forecast": forecast.strip().lower(),
-                    }
-                )
-            break
+    # Extract current levels and forecast trends
+    for section in ["pollens", "spores"]:
+        current_section = root.find(f".//report/current/{section}")
+        forecast_section = root.find(f".//report/forecast/{section}")
+        if current_section is None:
+            continue
+        for el in current_section:
+            code = el.tag
+            try:
+                level = int(el.text.strip())
+            except (ValueError, AttributeError):
+                level = 0
 
-    # Fallback: try to extract from any child elements with level-like values
-    if not result["taxons"]:
-        for el in root.iter():
-            if el.text and el.text.strip().lower() in RISK_LEVELS:
-                parent = el
-                name = parent.tag.replace("_", " ").title()
-                result["taxons"].append(
-                    {
-                        "name": name,
-                        "current_level": el.text.strip().lower(),
-                        "forecast": el.text.strip().lower(),
-                    }
-                )
+            trend = "="
+            if forecast_section is not None:
+                forecast_el = forecast_section.find(code)
+                if forecast_el is not None and forecast_el.text:
+                    trend = forecast_el.text.strip()
+
+            result["taxons"].append({
+                "name": name_map.get(code, code),
+                "current_level": level,
+                "trend": trend,
+            })
 
     return result
 
@@ -164,38 +149,25 @@ def format_summary(forecast: dict) -> str:
     # Sort taxons by risk level (highest first)
     sorted_taxons = sorted(
         forecast["taxons"],
-        key=lambda t: RISK_LEVELS.get(t["current_level"], 0),
+        key=lambda t: t["current_level"],
         reverse=True,
     )
 
     # Separate into concerning and safe
-    concerning = [
-        t for t in sorted_taxons if RISK_LEVELS.get(t["current_level"], 0) >= 2
-    ]
-    present = [
-        t
-        for t in sorted_taxons
-        if RISK_LEVELS.get(t["current_level"], 0) == 1
-    ]
-    clear = [
-        t for t in sorted_taxons if RISK_LEVELS.get(t["current_level"], 0) == 0
-    ]
+    concerning = [t for t in sorted_taxons if t["current_level"] >= 2]
+    present = [t for t in sorted_taxons if t["current_level"] == 1]
+    clear = [t for t in sorted_taxons if t["current_level"] == 0]
 
     if concerning:
         lines.append("  ** TAKE PRECAUTIONS — elevated pollen detected **")
         lines.append("")
         for t in concerning:
             indicator = RISK_EMOJI.get(t["current_level"], "?")
-            trend = ""
-            cur = RISK_LEVELS.get(t["current_level"], 0)
-            fcast = RISK_LEVELS.get(t["forecast"], 0)
-            if fcast > cur:
-                trend = " (RISING)"
-            elif fcast < cur:
-                trend = " (falling)"
+            level_label = RISK_LABELS.get(t["current_level"], "unknown")
+            trend_label = FORECAST_LABELS.get(t["trend"], t["trend"])
             lines.append(
-                f"  {indicator} {t['name']:<20} Current: {t['current_level']:<10} "
-                f"Forecast: {t['forecast']}{trend}"
+                f"  {indicator} {t['name']:<25} Level: {level_label:<10} "
+                f"Trend: {trend_label}"
             )
     else:
         lines.append("  Good news — no high pollen levels detected!")
@@ -204,7 +176,10 @@ def format_summary(forecast: dict) -> str:
         lines.append("")
         lines.append("  Low levels (present but manageable):")
         for t in present:
-            lines.append(f"  [!]  {t['name']:<20} {t['current_level']}")
+            trend_label = FORECAST_LABELS.get(t["trend"], t["trend"])
+            lines.append(
+                f"  [!]  {t['name']:<25} Trend: {trend_label}"
+            )
 
     if clear:
         lines.append("")
@@ -214,7 +189,7 @@ def format_summary(forecast: dict) -> str:
     lines.append("")
     lines.append("-" * 50)
     max_level = max(
-        (RISK_LEVELS.get(t["current_level"], 0) for t in sorted_taxons),
+        (t["current_level"] for t in sorted_taxons),
         default=0,
     )
     if max_level >= 4:
