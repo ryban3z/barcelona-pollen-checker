@@ -228,6 +228,54 @@ CSV_HEADERS = [
 ]
 
 
+def format_short_summary(forecast: dict) -> str:
+    """Format a compact summary for push notifications."""
+    if not forecast["taxons"]:
+        return "No pollen data available today."
+
+    sorted_taxons = sorted(
+        forecast["taxons"], key=lambda t: t["current_level"], reverse=True
+    )
+    max_level = sorted_taxons[0]["current_level"]
+
+    # Only show moderate+ pollens
+    high = [t for t in sorted_taxons if t["current_level"] >= 2]
+    rising = [t for t in sorted_taxons if t["trend"] == "A"]
+
+    lines = []
+    today = datetime.now().strftime("%a %d %b %Y")
+    lines.append(today)
+    if forecast["date_start"] and forecast["date_end"]:
+        lines.append(f"Forecast: {forecast['date_start']} - {forecast['date_end']}")
+    lines.append("")
+
+    if high:
+        for t in high:
+            label = RISK_LABELS[t["current_level"]].upper()
+            trend = FORECAST_LABELS.get(t["trend"], "")
+            trend_str = f" ({trend})" if trend != "stable" else ""
+            lines.append(f"  {t['name']}: {label}{trend_str}")
+
+    if rising:
+        names = ", ".join(t["name"] for t in rising if t["current_level"] < 2)
+        if names:
+            lines.append(f"  Rising: {names}")
+
+    # Recommendation
+    if max_level >= 4:
+        rec = "Stay indoors. Take antihistamines."
+    elif max_level >= 3:
+        rec = "Limit outdoor time. Consider antihistamines."
+    elif max_level >= 2:
+        rec = "Be aware. Carry antihistamines."
+    elif max_level >= 1:
+        rec = "Low risk. Enjoy your day!"
+    else:
+        rec = "All clear!"
+
+    return "\n".join(lines) + f"\n\n{rec}"
+
+
 def save_to_csv(forecast: dict) -> None:
     """Append today's pollen data to the CSV history file."""
     if not forecast["taxons"]:

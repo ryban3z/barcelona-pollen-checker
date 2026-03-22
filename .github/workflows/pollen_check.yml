@@ -30,41 +30,16 @@ jobs:
           git diff --staged --quiet || git commit -m "Add pollen data for $(date +%Y-%m-%d)"
           git push
 
-      # --- Optional: uncomment ONE of the notification methods below ---
-
-      # OPTION 1: Create a GitHub Issue with the daily report
-      # - name: Create GitHub Issue with pollen report
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     REPORT=$(python pollen_checker.py 2>&1)
-      #     DATE=$(date +%Y-%m-%d)
-      #     gh issue create \
-      #       --title "Pollen Report - $DATE" \
-      #       --body "\`\`\`
-      #     $REPORT
-      #     \`\`\`" \
-      #       --label "pollen-report"
-
-      # OPTION 2: Send email via a third-party action
-      # Requires setting repository secrets: MAIL_USERNAME, MAIL_PASSWORD
-      # - name: Send email notification
-      #   uses: dawidd6/action-send-mail@v3
-      #   with:
-      #     server_address: smtp.gmail.com
-      #     server_port: 465
-      #     username: ${{ secrets.MAIL_USERNAME }}
-      #     password: ${{ secrets.MAIL_PASSWORD }}
-      #     subject: "Barcelona Pollen Report - ${{ github.event.repository.name }}"
-      #     to: your-email@example.com
-      #     from: Pollen Bot
-      #     body: ${{ steps.pollen.outputs.report }}
-
-      # OPTION 3: Send to Slack via webhook
-      # Requires setting repository secret: SLACK_WEBHOOK_URL
-      # - name: Send Slack notification
-      #   run: |
-      #     REPORT=$(python pollen_checker.py 2>&1)
-      #     curl -X POST -H 'Content-type: application/json' \
-      #       --data "{\"text\": \"$REPORT\"}" \
-      #       ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Send ntfy notification
+        run: |
+          REPORT=$(python -c "
+          from pollen_checker import fetch_forecast_xml, parse_forecast, format_short_summary
+          xml = fetch_forecast_xml()
+          forecast = parse_forecast(xml)
+          print(format_short_summary(forecast))
+          ")
+          curl -s \
+            -H "Title: Barcelona Pollen Report" \
+            -H "Tags: sunflower" \
+            -d "$REPORT" \
+            ntfy.sh/barcelona-pollen-ryban3z
