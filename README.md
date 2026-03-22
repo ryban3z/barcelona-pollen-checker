@@ -40,6 +40,5 @@ To check a different city, change `barcelona` in the API URL in `pollen_checker.
 
 ## Next steps to explore
 
-- **Parse the actual XML structure**: The script includes flexible parsing that handles several XML patterns. Once you see the real XML response, you can tighten the parsing to match exactly.
 - **Add a notification channel**: Uncomment one of the notification options in the workflow.
 - **Store historical data**: Save daily reports to a JSON file and commit them to track pollen trends over time.

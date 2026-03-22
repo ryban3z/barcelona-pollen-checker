@@ -9,8 +9,11 @@ Data source: https://aerobiologia.cat/pia/en/forecast/barcelona
 License: CC BY-NC-SA 4.0
 """
 
+import csv
+import os
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from pathlib import Path
 from urllib.request import urlopen, Request
 
 API_URL = "https://aerobiologia.cat/api/v0/forecast/barcelona/en/xml"
@@ -217,6 +220,39 @@ def format_summary(forecast: dict) -> str:
     return "\n".join(lines)
 
 
+CSV_FILE = Path(__file__).parent / "pollen_history.csv"
+
+CSV_HEADERS = [
+    "date", "forecast_start", "forecast_end", "station",
+    "taxon", "level", "level_label", "trend",
+]
+
+
+def save_to_csv(forecast: dict) -> None:
+    """Append today's pollen data to the CSV history file."""
+    if not forecast["taxons"]:
+        return
+
+    today = datetime.now().strftime("%Y-%m-%d")
+    file_exists = CSV_FILE.exists()
+
+    with open(CSV_FILE, "a", newline="") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(CSV_HEADERS)
+        for t in forecast["taxons"]:
+            writer.writerow([
+                today,
+                forecast["date_start"],
+                forecast["date_end"],
+                forecast["station"],
+                t["name"],
+                t["current_level"],
+                RISK_LABELS.get(t["current_level"], "unknown"),
+                FORECAST_LABELS.get(t["trend"], t["trend"]),
+            ])
+
+
 def main():
     print("Fetching Barcelona pollen forecast...")
     print()
@@ -225,6 +261,8 @@ def main():
         forecast = parse_forecast(xml_text)
         summary = format_summary(forecast)
         print(summary)
+        save_to_csv(forecast)
+        print(f"  History saved to {CSV_FILE.name}")
     except Exception as e:
         print(f"Error fetching pollen data: {e}")
         print()
