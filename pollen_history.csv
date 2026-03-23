@@ -19,3 +19,23 @@ date,forecast_start,forecast_end,station,taxon,level,level_label,trend
 2026-03-22,2026-03-23,2026-03-29,Barcelona,Willow,1,low,stable
 2026-03-22,2026-03-23,2026-03-29,Barcelona,Alternaria,1,low,stable
 2026-03-22,2026-03-23,2026-03-29,Barcelona,Cladosporium,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Wall Pellitory,4,very high,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Gramineae,1,low,RISING
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Alder,1,low,falling
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Ash,1,low,falling
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Cruciferae (Brassicaceae),1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Cypress,3,high,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Elm,0,none,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Hazelnut,1,low,falling
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Maple,1,low,RISING
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Mastic tree,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Mercury,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Moraceae,2,moderate,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Pine,4,very high,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Planetree,4,very high,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Plantain,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Poplar,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Quercus,1,low,RISING
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Willow,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Alternaria,1,low,stable
+2026-03-23,2026-03-23,2026-03-29,Barcelona,Cladosporium,1,low,stable
