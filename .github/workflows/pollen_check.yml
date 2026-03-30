@@ -44,4 +44,4 @@ jobs:
             -H "Title: Barcelona Pollen Report" \
             -H "Tags: sunflower" \
             -d "$REPORT" \
-            ntfy.sh/barcelona-pollen-ryban3z
+            https://ntfy.sh/barcelona-pollen-ryban3z
