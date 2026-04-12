@@ -1,9 +1,9 @@
-name: Daily Barcelona Pollen Check
+name: Weekly Barcelona Pollen Check
 
 on:
   schedule:
-    # Runs at 7:00 AM UTC every day (9:00 AM Barcelona time in summer, 8:00 AM in winter)
-    - cron: "0 7 * * *"
+    # Runs at 7:00 AM UTC every Monday (9:00 AM Barcelona time in summer, 8:00 AM in winter)
+    - cron: "0 7 * * 1"
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -29,7 +29,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add pollen_history.csv
-          git diff --staged --quiet || git commit -m "Add pollen data for $(date +%Y-%m-%d)"
+          git diff --staged --quiet || git commit -m "Add weekly pollen data for $(date +%Y-%m-%d)"
           git push
 
       - name: Send ntfy notification
