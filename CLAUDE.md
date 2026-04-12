@@ -1,6 +1,6 @@
 # Barcelona Pollen Tracker
 
-Daily pollen forecast automation for Barcelona using the PIA (Point of Information on Aerobiology) API.
+Weekly pollen forecast automation for Barcelona using the PIA (Point of Information on Aerobiology) API.
 
 ## Quick Reference
 
@@ -19,7 +19,7 @@ No install or setup required — uses only Python standard library (`xml.etree.E
 ## CI/CD
 
 GitHub Actions workflow at `.github/workflows/pollen_check.yml`:
-- Runs daily at 07:00 UTC (08:00/09:00 Barcelona time)
+- Runs weekly on Mondays at 07:00 UTC (08:00/09:00 Barcelona time)
 - Manual trigger via `workflow_dispatch`
 - Notification options (GitHub Issues, email, Slack) are commented out in the workflow
 
@@ -27,7 +27,7 @@ GitHub Actions workflow at `.github/workflows/pollen_check.yml`:
 
 ```
 pollen_checker.py                  # Main script (fetch, parse, format, report)
-.github/workflows/pollen_check.yml # Daily automation workflow
+.github/workflows/pollen_check.yml # Weekly automation workflow
 ```
 
 ## Code Architecture
