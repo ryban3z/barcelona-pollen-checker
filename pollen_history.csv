@@ -568,3 +568,20 @@ date,forecast_start,forecast_end,station,taxon,level,level_label,trend
 2026-05-11,2026-05-11,2026-05-17,Barcelona,Willow,0,none,stable
 2026-05-11,2026-05-11,2026-05-17,Barcelona,Alternaria,2,moderate,stable
 2026-05-11,2026-05-11,2026-05-17,Barcelona,Cladosporium,2,moderate,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Wall Pellitory,4,very high,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Gramineae,3,high,RISING
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Olive tree,3,high,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Amaranthaceae,1,low,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Ash,0,none,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Beech,0,none,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Birch,0,none,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Cruciferae (Brassicaceae),0,none,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Cypress,1,low,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Moraceae,0,none,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Palms,1,low,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Pine,2,moderate,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Planetree,1,low,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Plantain,2,moderate,RISING
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Quercus,4,very high,stable
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Alternaria,2,moderate,RISING
+2026-05-18,2026-05-18,2026-05-24,Barcelona,Cladosporium,3,high,RISING
