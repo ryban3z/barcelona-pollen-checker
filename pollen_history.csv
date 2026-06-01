@@ -601,3 +601,18 @@ date,forecast_start,forecast_end,station,taxon,level,level_label,trend
 2026-05-25,2026-05-25,2026-05-31,Barcelona,Sorrel,0,none,stable
 2026-05-25,2026-05-25,2026-05-31,Barcelona,Alternaria,4,very high,stable
 2026-05-25,2026-05-25,2026-05-31,Barcelona,Cladosporium,4,very high,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Wall Pellitory,4,very high,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Gramineae,4,very high,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Olive tree,2,moderate,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Amaranthaceae,1,low,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Birch,0,none,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Cyperaceae,0,none,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Cypress,1,low,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Palms,1,low,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Pine,4,very high,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Planetree,1,low,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Plantain,2,moderate,RISING
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Quercus,4,very high,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Sorrel,1,low,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Alternaria,3,high,stable
+2026-06-01,2026-06-01,2026-06-07,Barcelona,Cladosporium,3,high,stable
