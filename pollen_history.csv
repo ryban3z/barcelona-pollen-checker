@@ -693,3 +693,19 @@ date,forecast_start,forecast_end,station,taxon,level,level_label,trend
 2026-07-06,2026-07-06,2026-07-12,Barcelona,Sorrel,1,low,stable
 2026-07-06,2026-07-06,2026-07-12,Barcelona,Alternaria,2,moderate,stable
 2026-07-06,2026-07-06,2026-07-12,Barcelona,Cladosporium,2,moderate,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Wall Pellitory,2,moderate,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Gramineae,2,moderate,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Olive tree,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Amaranthaceae,2,moderate,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Chestnut,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Cyperaceae,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Cypress,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Palms,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Pine,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Planetree,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Plantain,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Privet,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Quercus,1,low,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Sorrel,0,none,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Alternaria,4,very high,stable
+2026-07-13,2026-07-13,2026-07-19,Barcelona,Cladosporium,4,very high,stable
