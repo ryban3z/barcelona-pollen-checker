@@ -847,3 +847,17 @@ date,forecast_start,forecast_end,station,taxon,level,level_label,trend
 2026-09-21,2026-09-21,2026-09-27,Barcelona,Quercus,0,none,stable
 2026-09-21,2026-09-21,2026-09-27,Barcelona,Alternaria,4,very high,stable
 2026-09-21,2026-09-21,2026-09-27,Barcelona,Cladosporium,4,very high,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Wall Pellitory,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Gramineae,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Olive tree,0,none,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Amaranthaceae,2,moderate,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Australian pine,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Compositae (Asteraceae),1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Cypress,0,none,RISING
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Mugwort,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Palms,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Pine,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Planetree,1,low,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Plantain,0,none,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Alternaria,4,very high,stable
+2026-09-28,2026-09-28,2026-10-04,Barcelona,Cladosporium,4,very high,stable
